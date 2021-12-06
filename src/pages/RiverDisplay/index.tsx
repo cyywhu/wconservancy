@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import styles from './index.less';
 
 const RiverDisplay = () => {
+
   // 创建一个场景、相机、渲染器
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(75, 400 / 400, 0.1, 1000);
@@ -15,6 +16,11 @@ const RiverDisplay = () => {
   if(document.getElementById('canvas-frame')){
     const node: HTMLElement = document.getElementById('canvas-frame')!;
     node.appendChild(renderer.domElement);
+    node.addEventListener('resize', () => {
+      renderer.setSize(node.offsetWidth, node.offsetHeight);
+      camera.aspect = node.offsetWidth / node.offsetHeight;
+      camera.updateProjectionMatrix();
+    }); 
 
     // 创建一个3D物体加入场景
     var geometry = new THREE.BoxGeometry();
@@ -32,6 +38,8 @@ const RiverDisplay = () => {
     animation();
   }
   }, [])
+
+
 
   return (
     <div id={'canvas-frame'} className={styles.canvas} />
